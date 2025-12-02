@@ -23,7 +23,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile\
+      dockerfile: Dockerfile
     environment:
       DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/wishlist
       JWT_SECRET_KEY: dev-secret
