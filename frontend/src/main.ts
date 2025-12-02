@@ -15,15 +15,33 @@ export const storage = {} as any;
 
 export async function api(path: string, opts: RequestInit = {}) {
 	const headers: Record<string, string> = { 'Content-Type': 'application/json', ...(opts.headers as any || {}) };
-	let res = await fetch(`${API_BASE}${path}`, { ...opts, headers, credentials: 'include' });
-	const contentType = res.headers.get('content-type') || '';
-	if (!res.ok) {
-		// With session cookies, 401 means not logged in — bubble up
-		let detail = `HTTP ${res.status}`;
-		try { detail = contentType.includes('application/json') ? (await res.json()).detail ?? detail : await res.text(); } catch {}
-		throw new Error(detail);
+	
+	// Add loading state
+	const loadingElement = document.querySelector('#loading');
+	if (loadingElement) {
+		loadingElement.classList.remove('hidden');
 	}
-	return contentType.includes('application/json') ? res.json() : res.text();
+	
+	try {
+		let res = await fetch(`${API_BASE}${path}`, { ...opts, headers, credentials: 'include' });
+		const contentType = res.headers.get('content-type') || '';
+		
+		if (!res.ok) {
+			// With session cookies, 401 means not logged in — bubble up
+			let detail = `HTTP ${res.status}`;
+			try { 
+				detail = contentType.includes('application/json') ? (await res.json()).detail ?? detail : await res.text(); 
+			} catch {}
+			throw new Error(detail);
+		}
+		
+		return contentType.includes('application/json') ? res.json() : res.text();
+	} finally {
+		// Remove loading state
+		if (loadingElement) {
+			loadingElement.classList.add('hidden');
+		}
+	}
 }
 
 export function toast(msg: string, type: 'ok'|'warn'|'err' = 'ok') {

@@ -16,6 +16,10 @@
 	</header>
 
     <main class="container">
+        <div id="loading" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent); z-index: 9999;">
+            <div style="width: 30%; height: 100%; background: var(--accent-hover); animation: loading 2s infinite;"></div>
+        </div>
+
         <section id="auth-section">
             <div class="auth-center">
                 <div class="auth-box">
@@ -58,7 +62,7 @@
                 </div>
                 <div>
                     <div class="card">
-                        <h3 style="margin-top:0">Create a new wishlist</n3>
+                        <h3 style="margin-top:0">Create a new wishlist</h3>
                         <form id="create-wishlist-form">
                             <input id="wl-title" placeholder="Title (max 100)" maxlength="100" required />
                             <div class="spacer"></div>
@@ -97,6 +101,14 @@
 		window.API_BASE = '/api';
 	</script>
     <script type="module" src="dist/main.js"></script>
+    
+    <style>
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
 </body>
 </html>
 
