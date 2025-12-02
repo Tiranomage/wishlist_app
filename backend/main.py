@@ -14,7 +14,7 @@ app = FastAPI(title="Wishlist API", version="0.1.0")
 # CORS will be finalized in config, keep permissive for scaffold
 app.add_middleware(
 	CORSMiddleware,
-	allow_origins=["*"],
+	allow_origins=settings.backend_cors_origins.split(","),
 	allow_credentials=True,
 	allow_methods=["*"],
 	allow_headers=["*"],
@@ -39,14 +39,15 @@ def get_app() -> FastAPI:
 
 @app.on_event("startup")
 def on_startup():
-	# Ensure tables exist for dev/tests; in production, prefer Alembic migrations
-	Base.metadata.create_all(bind=engine)
-	# Best-effort schema patching to avoid manual alembic when container has no CLI
-	with engine.begin() as conn:
-		try:
-			conn.execute(text("ALTER TABLE wishlists ADD COLUMN IF NOT EXISTS share_token VARCHAR(5)"))
-			conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_wishlists_share_token ON wishlists(share_token)"))
-		except Exception:
-			pass
+    # Create tables only in development environment
+    if settings.environment == "development":
+        Base.metadata.create_all(bind=engine)
+    # Best-effort schema patching to avoid manual alembic when container has no CLI
+    with engine.begin() as conn:
+        try:
+            conn.execute(text("ALTER TABLE wishlists ADD COLUMN IF NOT EXISTS share_token VARCHAR(5)"))
+            conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_wishlists_share_token ON wishlists(share_token)"))
+        except Exception:
+            pass
 
 

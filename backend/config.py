@@ -9,7 +9,7 @@ class Settings(BaseSettings):
 	# App
 	app_name: str = "Wishlist API"
 	environment: str = Field("development", env="ENVIRONMENT")
-	backend_cors_origins: str = Field("*", env="BACKEND_CORS_ORIGINS")
+	backend_cors_origins: str = Field("http://localhost,http://localhost:3000,http://127.0.0.1,http://127.0.0.1:3000", env="BACKEND_CORS_ORIGINS")
 
 	# Security
 	jwt_secret_key: str = Field(default_factory=lambda: secrets.token_urlsafe(32), validation_alias="JWT_SECRET_KEY")
