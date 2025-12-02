@@ -9,6 +9,8 @@ from db import Base, engine
 from sqlalchemy import text
 
 
+settings = get_settings()
+
 app = FastAPI(title="Wishlist API", version="0.1.0")
 
 # CORS will be finalized in config, keep permissive for scaffold
@@ -20,7 +22,6 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 
-settings = get_settings()
 app.add_middleware(SessionMiddleware, secret_key=settings.session_secret_key, same_site="lax")
 
 app.include_router(auth_routes.router)
