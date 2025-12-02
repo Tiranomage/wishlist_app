@@ -1,4 +1,4 @@
-import { api, storage, toast } from '../main';
+import { api, toast } from '../main';
 import { loadDashboard } from './dashboard';
 
 export function setAuthedUI(authed: boolean) {
@@ -14,8 +14,6 @@ export function setupAuth() {
 	const resetForm = document.querySelector<HTMLFormElement>('#reset-form');
 	const navLogin = document.querySelector<HTMLButtonElement>('#nav-login');
 	const navLogout = document.querySelector<HTMLButtonElement>('#nav-logout');
-
-
 
 	registerForm?.addEventListener('submit', async (e) => {
 		e.preventDefault();
@@ -45,7 +43,8 @@ export function setupAuth() {
 
     navLogout?.addEventListener('click', async () => { try { await api('/auth/logout', { method: 'POST' }); } catch {} setAuthedUI(false); });
 
-	setAuthedUI(!!storage.access);
+	// Initial UI setup - authentication is handled by session cookies
+	setAuthedUI(false);
 }
 
 

@@ -11,8 +11,6 @@ const API_BASE = window.API_BASE || '/api';
 
 export type Json = Record<string, unknown>;
 
-export const storage = {} as any;
-
 export async function api(path: string, opts: RequestInit = {}) {
 	const headers: Record<string, string> = { 'Content-Type': 'application/json', ...(opts.headers as any || {}) };
 	
