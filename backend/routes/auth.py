@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from db import get_db
 from models import User
 from schemas.auth import RegisterRequest, LoginRequest, PasswordResetRequest, PasswordResetConfirm
-from services.security import hash_password, verify_password, create_password_reset_token
+from services.security import hash_password, verify_password, create_password_reset_token, decode_token
 from fastapi import Request
 
 

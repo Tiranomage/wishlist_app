@@ -1,6 +1,6 @@
 from sqlalchemy import String, Text, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from datetime import datetime
+from datetime import datetime, timezone
 from db import Base
 
 
@@ -13,7 +13,7 @@ class Wishlist(Base):
 	description: Mapped[str | None] = mapped_column(Text, nullable=True)
 	is_public: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 	share_token: Mapped[str | None] = mapped_column(String(5), nullable=True, unique=True, index=True)
-	created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
+	created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
 
 	owner: Mapped["User"] = relationship(back_populates="wishlists")
 	gifts: Mapped[list["Gift"]] = relationship(back_populates="wishlist", cascade="all, delete-orphan")
