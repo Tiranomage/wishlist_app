@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Wishlist App</title>
+	<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+	<header class="container">
+		<h1>Wishlist</h1>
+		<nav id="nav">
+			<button id="nav-login">Login</button>
+			<button id="nav-logout" class="hidden">Logout</button>
+		</nav>
+	</header>
+
+    <main class="container">
+        <section id="auth-section">
+            <div class="auth-center">
+                <div class="auth-box">
+                    <h2>Welcome back</h2>
+                    <form id="login-form">
+                        <input type="email" id="login-email" placeholder="Email" required />
+                        <div class="spacer"></div>
+                        <input type="password" id="login-password" placeholder="Password" required />
+                        <div class="auth-actions">
+                            <button type="submit">Login</button>
+                            <button type="button" id="toggle-register" class="secondary">Register</button>
+                        </div>
+                    </form>
+                    <div class="spacer-lg"></div>
+                    <form id="register-form" class="hidden">
+                        <input type="email" id="register-email" placeholder="Email" required maxlength="254" />
+                        <div class="spacer"></div>
+                        <input type="password" id="register-password" placeholder="Password (min 8)" required minlength="8" />
+                        <div class="auth-actions">
+                            <button type="submit">Create account</button>
+                            <button type="button" id="toggle-login" class="secondary">Back</button>
+                        </div>
+                    </form>
+                    <div class="spacer-lg"></div>
+                    <form id="reset-form">
+                        <input type="email" id="reset-email" placeholder="Email for reset" required />
+                        <div class="auth-actions">
+                            <button type="submit" class="secondary">Send reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="hidden">
+            <h2>Your Wishlists</h2>
+            <div class="grid two">
+                <div>
+                    <div id="wishlists" class="accordion"></div>
+                </div>
+                <div>
+                    <div class="card">
+                        <h3 style="margin-top:0">Create a new wishlist</n3>
+                        <form id="create-wishlist-form">
+                            <input id="wl-title" placeholder="Title (max 100)" maxlength="100" required />
+                            <div class="spacer"></div>
+                            <textarea id="wl-desc" placeholder="Description (optional)" rows="4"></textarea>
+                            <div class="spacer"></div>
+                            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="wl-public" /> Make public</label>
+                            <div class="spacer"></div>
+                            <button type="submit">Create wishlist</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="detail" class="hidden">
+            <div class="row" style="justify-content:space-between">
+                <button id="detail-back" class="secondary">← Back</button>
+                <div id="detail-token" class="badge"></div>
+            </div>
+            <div id="detail-content" class="card"></div>
+        </section>
+
+        <section id="public-browser">
+            <h2>Find a wishlist by share token</h2>
+            <div class="toolbar">
+                <input id="token-input" placeholder="Enter 5-char token" maxlength="5" />
+                <button id="token-search">Open</button>
+            </div>
+            <div id="public-wishlists"></div>
+        </section>
+	</main>
+
+	<div id="toast" class="toast hidden"></div>
+    <div id="modal" class="modal hidden"><div class="modal-box"><div id="modal-title" class="modal-title"></div><form id="modal-form"></form><div class="row" style="justify-content:flex-end;gap:8px"><button id="modal-cancel" class="secondary" type="button">Cancel</button><button id="modal-submit" type="submit">Save</button></div></div></div>
+	<script>
+		window.API_BASE = '/api';
+	</script>
+    <script type="module" src="dist/main.js"></script>
+</body>
+</html>
+
+

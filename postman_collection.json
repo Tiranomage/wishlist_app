@@ -1,0 +1,43 @@
+{
+  "info": {
+    "name": "Wishlist API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Register",
+      "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "http://localhost:8000/auth/register", "body": {"mode": "raw", "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"}}
+    },
+    {
+      "name": "Auth - Login",
+      "event": [{"listen": "test", "script": {"exec": [
+        "let json = pm.response.json();",
+        "pm.collectionVariables.set('access_token', json.access_token);",
+        "pm.collectionVariables.set('refresh_token', json.refresh_token);"
+      ], "type": "text/javascript"}}],
+      "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "url": "http://localhost:8000/auth/login", "body": {"mode": "raw", "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"}}
+    },
+    {
+      "name": "Wishlists - Create",
+      "request": {"method": "POST", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}, {"key": "Content-Type", "value": "application/json"}], "url": "http://localhost:8000/wishlists", "body": {"mode": "raw", "raw": "{\n  \"title\": \"Birthday\",\n  \"is_public\": true\n}"}}
+    },
+    {
+      "name": "Wishlists - List (own)",
+      "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "http://localhost:8000/wishlists"}
+    },
+    {
+      "name": "Wishlists - List (public)",
+      "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}], "url": "http://localhost:8000/wishlists?public=true"}
+    },
+    {
+      "name": "Gifts - Add",
+      "request": {"method": "POST", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}, {"key": "Content-Type", "value": "application/json"}], "url": "http://localhost:8000/gifts/wishlist/1", "body": {"mode": "raw", "raw": "{\n  \"name\": \"Book\"\n}"}}
+    },
+    {
+      "name": "Gifts - Update",
+      "request": {"method": "PATCH", "header": [{"key": "Authorization", "value": "Bearer {{access_token}}"}, {"key": "Content-Type", "value": "application/json"}], "url": "http://localhost:8000/gifts/1", "body": {"mode": "raw", "raw": "{\n  \"status\": \"Purchased\"\n}"}}
+    }
+  ]
+}
+
+
