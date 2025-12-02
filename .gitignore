@@ -1,63 +1,47 @@
 ```
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-*.tmp
-*.swp
+# Dependencies
+node_modules/
 
 # Environment
 .env
 .env.local
-*.env.*
+.env.*
 
-# Dependencies
-node_modules/
-julia-*/
-zig*/
-target/
-.gradle/
-
-# Build artifacts
-dist/
-build/
-*.so
-*.dylib
-*.dll
-*.exe
+# Logs
+*.log
 
 # Editor/IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*.tmp
 
-# System
-.DS_Store
-Thumbs.db
+# Build artifacts
+dist/
+build/
+*.o
+*.obj
+*.out
 
-# Testing
-.pytest_cache/
-.mypy_cache/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+.env
+.env.local
+.env.*
+
+# Coverage
 coverage/
 htmlcov/
+.coverage
 
-# Compression
+# Compressed files
 *.zip
 *.gz
 *.tar
