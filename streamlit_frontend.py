@@ -112,19 +112,25 @@ def dashboard():
     
     st.title("Your Wishlists")
     
+    # Initialize session state for showing create form
+    if 'show_create_form' not in st.session_state:
+        st.session_state.show_create_form = False
+    
+    # Toggle button for create form
+    if st.button("Create New Wishlist"):
+        st.session_state.show_create_form = not st.session_state.show_create_form
+    
     # Fetch wishlists
     wishlists = make_api_call("/wishlists", "GET", None, require_auth=True)
     
-    if wishlists:
-        col1, col2 = st.columns([3, 1])
-        
-        with col2:
-            st.subheader("Create Wishlist")
+    # Show create form if toggled
+    if st.session_state.show_create_form:
+        with st.expander("Create New Wishlist", expanded=True):
             title = st.text_input("Title")
             description = st.text_area("Description (optional)")
             is_public = st.checkbox("Make Public")
             
-            if st.button("Create"):
+            if st.button("Create Wishlist"):
                 if title:
                     new_wishlist = make_api_call("/wishlists", "POST", {
                         "title": title,
@@ -134,12 +140,13 @@ def dashboard():
                     
                     if new_wishlist:
                         st.success("Wishlist created!")
+                        st.session_state.show_create_form = False
                         st.rerun()
                 else:
                     st.warning("Please enter a title")
-        
-        with col1:
-            st.subheader("Your Wishlists")
+    
+    if wishlists:
+        st.subheader("Your Wishlists")
             
             if isinstance(wishlists, list) and len(wishlists) > 0:
                 for wl in wishlists:
@@ -248,7 +255,7 @@ def dashboard():
                                 else:
                                     st.warning("Please enter a gift name")
             else:
-                st.info("No wishlists yet. Create one using the form on the right!")
+                st.info("No wishlists yet. Click 'Create New Wishlist' above to create one!")
 
 def main():
     """Main application"""
