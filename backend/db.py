@@ -12,7 +12,15 @@ class Base(DeclarativeBase):
 	pass
 
 
-engine = create_engine(settings.database_url, pool_pre_ping=True, future=True)
+engine = create_engine(
+    settings.database_url,
+    pool_pre_ping=True,
+    pool_recycle=300,
+    pool_size=10,
+    max_overflow=20,
+    echo=False,
+    future=True
+)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
 
 
@@ -20,10 +28,14 @@ def get_db() -> Generator:
 	db = SessionLocal()
 	try:
 		yield db
-	except Exception:
+	except Exception as e:
 		db.rollback()
-		raise
+		raise e
 	finally:
-		db.close()
+		try:
+			db.close()
+		except Exception:
+			# Ignore errors during closing the session
+			pass
 
 
