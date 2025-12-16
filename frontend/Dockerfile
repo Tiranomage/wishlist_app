@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package.json package-lock.json* tsconfig.json /app/
 RUN npm ci || npm i
 COPY src /app/src
-COPY styles.css /app/
+COPY styles.css /app/src/
 RUN npm run build
 
 FROM nginx:alpine
