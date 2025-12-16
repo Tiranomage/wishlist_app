@@ -31,6 +31,8 @@ def make_api_call(endpoint: str, method="GET", data=None, require_auth=True):
             response = requests.post(url, headers=headers, json=data)
         elif method == "PUT":
             response = requests.put(url, headers=headers, json=data)
+        elif method == "PATCH":
+            response = requests.patch(url, headers=headers, json=data)
         elif method == "DELETE":
             response = requests.delete(url, headers=headers)
         
@@ -189,12 +191,12 @@ def dashboard():
                         st.write("**Gifts in this wishlist:**")
                         
                         # Fetch gifts for this wishlist
-                        gifts = make_api_call(f"/wishlists/{wl['id']}/gifts", "GET")
+                        gifts = make_api_call(f"/gifts/wishlist/{wl['id']}", "GET")
                         if gifts:
                             for gift in gifts:
                                 with st.container():
-                                    st.write(f"- **{gift['name']}** - {gift['description'] or 'No description'}")
-                                    st.write(f"  Price: {gift['price'] or 'N/A'} | Link: {gift['link'] or 'N/A'}")
+                                    st.write(f"- **{gift['name']}** - {gift.get('image_url', 'No image') or 'No image'}")
+                                    st.write(f"  Price: {gift['price'] or 'N/A'} | Link: {gift.get('purchase_link', 'N/A') or 'N/A'}")
                                     
                                     # Edit gift buttons
                                     col_a, col_b = st.columns(2)
@@ -218,16 +220,16 @@ def dashboard():
                                     if st.session_state.get(edit_key, False):
                                         with st.form(key=f"edit_gift_form_{gift['id']}"):
                                             new_name = st.text_input("Name", value=gift['name'])
-                                            new_desc = st.text_input("Description", value=gift['description'] or "")
+                                            new_image_url = st.text_input("Image URL", value=gift.get('image_url', '') or "")
                                             new_price = st.text_input("Price", value=gift['price'] or "")
-                                            new_link = st.text_input("Link", value=gift['link'] or "")
+                                            new_purchase_link = st.text_input("Purchase Link", value=gift.get('purchase_link', '') or "")
                                             
                                             if st.form_submit_button("Update Gift"):
-                                                make_api_call(f"/gifts/{gift['id']}", "PUT", {
+                                                make_api_call(f"/gifts/{gift['id']}", "PATCH", {
                                                     "name": new_name,
-                                                    "description": new_desc,
+                                                    "image_url": new_image_url,
                                                     "price": float(new_price) if new_price else None,
-                                                    "link": new_link
+                                                    "purchase_link": new_purchase_link
                                                 })
                                                 st.session_state[edit_key] = False
                                                 st.rerun()
@@ -236,17 +238,17 @@ def dashboard():
                         st.write("**Add a gift:**")
                         with st.form(key=f"add_gift_{wl['id']}"):
                             gift_name = st.text_input("Gift Name", key=f"gname_{wl['id']}")
-                            gift_desc = st.text_input("Description", key=f"gdesc_{wl['id']}")
+                            gift_image_url = st.text_input("Image URL", key=f"gimage_{wl['id']}")
                             gift_price = st.text_input("Price", key=f"gprice_{wl['id']}")
-                            gift_link = st.text_input("Link", key=f"glink_{wl['id']}")
+                            gift_purchase_link = st.text_input("Purchase Link", key=f"glink_{wl['id']}")
                             
                             if st.form_submit_button("Add Gift"):
                                 if gift_name:
-                                    new_gift = make_api_call(f"/wishlists/{wl['id']}/gifts", "POST", {
+                                    new_gift = make_api_call(f"/gifts/wishlist/{wl['id']}", "POST", {
                                         "name": gift_name,
-                                        "description": gift_desc,
+                                        "image_url": gift_image_url,
                                         "price": float(gift_price) if gift_price else None,
-                                        "link": gift_link
+                                        "purchase_link": gift_purchase_link
                                     })
                                     
                                     if new_gift:
