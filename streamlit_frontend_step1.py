@@ -151,10 +151,10 @@ def dashboard():
         st.subheader("Your Wishlists")
             
         if isinstance(wishlists, list) and len(wishlists) > 0:
-                for wl in wishlists:
-                    with st.expander(f"{wl['title']} ({'Public' if wl['is_public'] else 'Private'})"):
-                        st.write(f"**ID:** {wl['id']}")
-                        st.write(f"**Description:** {wl['description'] or 'No description'}")
+            for wl in wishlists:
+                with st.expander(f"{wl['title']} ({'Public' if wl['is_public'] else 'Private'})"):
+                    st.write(f"**ID:** {wl['id']}")
+                    st.write(f"**Description:** {wl['description'] or 'No description'}")
                         
                         # Show share token if public
                         if wl['is_public'] and wl.get('share_token'):
