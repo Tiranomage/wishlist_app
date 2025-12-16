@@ -1,3 +1,4 @@
+import time
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Any
 from authlib.jose import jwt
@@ -35,9 +36,25 @@ def create_refresh_token(subject: str | int, expires_days: Optional[int] = None)
 
 def decode_token(token: str, refresh: bool = False) -> dict[str, Any]:
 	secret = settings.jwt_refresh_secret_key if refresh else settings.jwt_secret_key
-	claims = jwt.decode(token, secret)
-	jwt.validate_claims(claims, claims_options={"exp": {"essential": True}})
-	return claims
+	try:
+		claims = jwt.decode(token, secret)
+		# Check if token has expired - manually checking expiration
+		current_time = time.time()
+		exp_time = float(claims.get("exp", 0))
+		
+		if exp_time < current_time:
+			raise Exception("Token has expired")
+			
+		# Verify token type matches expected type
+		expected_type = "refresh" if refresh else "access"
+		token_type = claims.get("type")
+		if token_type != expected_type:
+			raise Exception(f"Invalid token type: expected {expected_type}, got {token_type}")
+		
+		return claims
+	except Exception as e:
+		print(f"[Auth Debug] Error decoding token: {str(e)}")
+		raise
 
 
 def create_password_reset_token(subject: str | int, expires_minutes: int = 30) -> str:

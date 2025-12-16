@@ -43,7 +43,7 @@ def make_api_call(endpoint: str, method="GET", data=None, require_auth=True):
             st.session_state.access_token = None
             st.session_state.user_email = None
             st.error("Authentication required. Please log in.")
-            st.rerun()
+            return None
         else:
             st.error(f"Error: {response.status_code} - {response.text}")
             return None
