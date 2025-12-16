@@ -1,4 +1,17 @@
 ```
+# Database files
+*.db
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Dependencies
+.venv/
+venv/
+node_modules/
+
 # Python
 __pycache__/
 *.pyc
@@ -6,8 +19,8 @@ __pycache__/
 *.pyd
 .Python
 env/
-venv/
 .venv/
+venv/
 pip-log.txt
 pip-delete-this-directory.txt
 .tox/
@@ -19,47 +32,27 @@ coverage.xml
 *.cover
 *.log
 *.pot
-*.pyc
-*.pyo
-*.pyd
-*.so
-.TemporaryItems
-.tags*
-.pytest_cache/
-.mypy_cache/
-.hypothesis/
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
+# Build artifacts
 dist/
-downloads/
-eggs/
+build/
+*.egg-info/
 .eggs/
+.installed.cfg
 lib/
 lib64/
 parts/
 sdist/
 var/
 wheels/
-*.egg-info/
-.installed.cfg
+*.whl
 *.egg
-MANIFEST
 
-# Environment
-.env
-.env.local
-.env.*
-!*.env.example
-
-# IDE
+# Editors
 .vscode/
 .idea/
 *.swp
 *.swo
-*.tmp
 
 # OS
 .DS_Store
