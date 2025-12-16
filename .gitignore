@@ -1,4 +1,28 @@
 ```
+# Dependencies
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.env
+.env.local
+.env.*
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Editors
+.vscode/
+.idea/
+
+# Coverage reports
+.coverage
+coverage/
+htmlcov/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
 ```

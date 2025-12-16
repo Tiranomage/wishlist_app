@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 
 	# Database
 	database_url: str = Field(
-		"postgresql+psycopg://postgres:postgres@db:5432/wishlist",
+		"sqlite:///./wishlist.db",
 		env="DATABASE_URL",
 	)
 
