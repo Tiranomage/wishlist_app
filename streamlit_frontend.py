@@ -256,8 +256,8 @@ def dashboard():
                                         st.rerun()
                                 else:
                                     st.warning("Please enter a gift name")
-            else:
-                st.info("No wishlists yet. Click 'Create New Wishlist' above to create one!")
+        else:
+            st.info("No wishlists yet. Click 'Create New Wishlist' above to create one!")
 
 def main():
     """Main application"""
