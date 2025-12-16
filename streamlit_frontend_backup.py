@@ -150,7 +150,7 @@ def dashboard():
     if wishlists:
         st.subheader("Your Wishlists")
             
-        if isinstance(wishlists, list) and len(wishlists) > 0:
+            if isinstance(wishlists, list) and len(wishlists) > 0:
                 for wl in wishlists:
                     with st.expander(f"{wl['title']} ({'Public' if wl['is_public'] else 'Private'})"):
                         st.write(f"**ID:** {wl['id']}")
