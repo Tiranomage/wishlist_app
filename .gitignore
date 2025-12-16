@@ -1,28 +1,48 @@
 ```
+# Database
+*.db
+
+# Environment
+.env
+.env.local
+*.env.*
+
 # Dependencies
+.venv/
+venv/
+node_modules/
+
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.env
-.env.local
-.env.*
+.Python
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
 
-# Logs and temp files
+# Logs
 *.log
-*.tmp
 
 # Editors
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# Coverage reports
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
 .coverage
 coverage/
 htmlcov/
 
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
+# Temporary files
+*.tmp
+*.temp
 ```
