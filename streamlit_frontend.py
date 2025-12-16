@@ -10,7 +10,7 @@ if 'user_email' not in st.session_state:
     st.session_state.user_email = None
 
 # Backend API base URL
-API_BASE = "http://localhost:8000/api"
+API_BASE = "http://localhost:8000"
 
 def make_api_call(endpoint: str, method="GET", data=None, require_auth=True):
     """Make an API call to the backend"""

@@ -63,11 +63,18 @@ DATABASE_URL=sqlite:///./wishlist.db
 
 - `/auth/register` - Register a new user
 - `/auth/login` - Login and get JWT token
-- `/wishlists/` - Get all user's wishlists
+- `/auth/logout` - Logout user
+- `/auth/refresh` - Refresh JWT token
+- `/auth/me` - Get current user info
+- `/auth/password-reset` - Request password reset
+- `/auth/password-reset/confirm` - Confirm password reset
+- `/wishlists` - Get all user's wishlists
 - `/wishlists/{wishlist_id}` - Get a specific wishlist
-- `/wishlists/create` - Create a new wishlist
-- `/wishlists/{wishlist_id}/update` - Update a wishlist
-- `/wishlists/{wishlist_id}/delete` - Delete a wishlist
-- `/gifts/{wishlist_id}/add_gift` - Add a gift to a wishlist
-- `/gifts/{gift_id}/update` - Update a gift
-- `/gifts/{gift_id}/delete` - Delete a gift
+- `/wishlists` - Create a new wishlist (POST)
+- `/wishlists/{wishlist_id}` - Update a wishlist (PUT)
+- `/wishlists/{wishlist_id}` - Delete a wishlist (DELETE)
+- `/wishlists/{wishlist_id}/gifts` - Get gifts for a wishlist
+- `/wishlists/{wishlist_id}/gifts` - Add a gift to a wishlist (POST)
+- `/gifts/{gift_id}` - Update a gift (PUT)
+- `/gifts/{gift_id}` - Delete a gift (DELETE)
+- `/health` - Health check endpoint
