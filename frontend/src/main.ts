@@ -1,7 +1,6 @@
 import { setupAuth, setAuthedUI } from './modules/auth';
 import { setupDashboard, loadDashboard } from './modules/dashboard';
 import { setupPublic } from './modules/public';
-import './styles.css';
 
 declare global {
 	interface Window { API_BASE?: string }
@@ -11,8 +10,16 @@ const API_BASE = window.API_BASE || '/api';
 
 export type Json = Record<string, unknown>;
 
+// Store tokens globally
+let accessToken: string | null = null;
+
 export async function api(path: string, opts: RequestInit = {}) {
 	const headers: Record<string, string> = { 'Content-Type': 'application/json', ...(opts.headers as any || {}) };
+	
+	// Add authorization header if we have an access token
+	if (accessToken) {
+		headers['Authorization'] = `Bearer ${accessToken}`;
+	}
 	
 	// Add loading state
 	const loadingElement = document.querySelector('#loading');
@@ -33,6 +40,15 @@ export async function api(path: string, opts: RequestInit = {}) {
 			throw new Error(detail);
 		}
 		
+		// Check if response contains new tokens (after login)
+		if (path.includes('/auth/login')) {
+			const responseJson = contentType.includes('application/json') ? await res.json() : {};
+			if (responseJson.access_token) {
+				accessToken = responseJson.access_token;
+			}
+			return responseJson;
+		}
+		
 		return contentType.includes('application/json') ? res.json() : res.text();
 	} finally {
 		// Remove loading state
@@ -40,6 +56,11 @@ export async function api(path: string, opts: RequestInit = {}) {
 			loadingElement.classList.add('hidden');
 		}
 	}
+}
+
+// Function to clear stored tokens
+export function clearTokens() {
+	accessToken = null;
 }
 
 export function toast(msg: string, type: 'ok'|'warn'|'err' = 'ok') {

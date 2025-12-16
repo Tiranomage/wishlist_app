@@ -1,4 +1,4 @@
-import { api, toast } from '../main';
+import { api, toast, clearTokens } from '../main';
 import { loadDashboard } from './dashboard';
 
 export function setAuthedUI(authed: boolean) {
@@ -41,7 +41,13 @@ export function setupAuth() {
 		try { await api('/auth/password-reset', { method: 'POST', body: JSON.stringify({ email }) }); toast('Reset token printed to backend console'); } catch (err: any) { toast(err.message, 'err'); }
 	});
 
-    navLogout?.addEventListener('click', async () => { try { await api('/auth/logout', { method: 'POST' }); } catch {} setAuthedUI(false); });
+    navLogout?.addEventListener('click', async () => { 
+        try { 
+            await api('/auth/logout', { method: 'POST' }); 
+        } catch {} 
+        clearTokens(); // Clear tokens on logout
+        setAuthedUI(false); 
+    });
 
 	// Initial UI setup - authentication is handled by session cookies
 	setAuthedUI(false);
