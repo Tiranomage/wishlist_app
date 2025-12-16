@@ -13,22 +13,25 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/register", status_code=201)
 def register(payload: RegisterRequest, db: Session = Depends(get_db)):
-	existing_user = db.query(User).filter(User.email == payload.email).first()
-	if existing_user:
-		raise HTTPException(status_code=400, detail="Email already registered")
-	user = User(email=payload.email, password_hash=hash_password(payload.password))
-	try:
-		db.add(user)
-		db.commit()
-		db.refresh(user)
-		return {"id": user.id, "email": user.email}
-	except Exception as e:
-		db.rollback()
-		# Проверяем, возможно, ошибка из-за уникальности
-		if db.query(User).filter(User.email == payload.email).first():
-			raise HTTPException(status_code=400, detail="Email already registered")
-		else:
-			raise HTTPException(status_code=500, detail="An error occurred during registration")
+    # Проверяем, существует ли пользователь с таким email до создания
+    existing_user = db.query(User).filter(User.email == payload.email).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    user = User(email=payload.email, password_hash=hash_password(payload.password))
+    try:
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return {"id": user.id, "email": user.email}
+    except Exception as e:
+        db.rollback()
+        # Проверяем, возможно, ошибка из-за уникальности
+        existing_user = db.query(User).filter(User.email == payload.email).first()
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        else:
+            raise HTTPException(status_code=500, detail=f"An error occurred during registration: {str(e)}")
 
 
 @router.post("/login", response_model=TokenResponse)
