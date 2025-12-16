@@ -44,11 +44,16 @@ def on_startup():
     if settings.environment == "development":
         Base.metadata.create_all(bind=engine)
     # Best-effort schema patching to avoid manual alembic when container has no CLI
-    with engine.begin() as conn:
-        try:
-            conn.execute(text("ALTER TABLE wishlists ADD COLUMN IF NOT EXISTS share_token VARCHAR(5)"))
-            conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_wishlists_share_token ON wishlists(share_token)"))
-        except Exception:
-            pass
+    try:
+        with engine.connect() as conn:
+            trans = conn.begin()
+            try:
+                conn.execute(text("ALTER TABLE wishlists ADD COLUMN IF NOT EXISTS share_token VARCHAR(5)"))
+                conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_wishlists_share_token ON wishlists(share_token)"))
+                trans.commit()
+            except Exception:
+                trans.rollback()
+    except Exception:
+        pass
 
 
