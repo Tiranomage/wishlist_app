@@ -118,6 +118,49 @@ def dashboard():
     with tab1:
         st.header("Your Wishlists")
     
+    with tab2:
+        st.header("Search Public Wishlists")
+        
+        # Token input for searching public wishlists
+        token_input = st.text_input("Enter wishlist token to search:", key="token_input")
+        search_button = st.button("Search Wishlist", key="search_button")
+        
+        if search_button:
+            if token_input:
+                # Try to get the public wishlist by token
+                wishlist_data = make_api_call(f"/wishlists/token/{token_input}", "GET", None, require_auth=False)
+                
+                if wishlist_data:
+                    # Display the found wishlist
+                    st.success("Wishlist found!")
+                    st.subheader(f"Wishlist: {wishlist_data['title']}")
+                    st.write(f"**Description:** {wishlist_data['description'] or 'No description'}")
+                    # Note: owner_email is None for public token access for privacy reasons
+                    
+                    # Display gifts in the wishlist
+                    st.write("---")
+                    st.subheader("Gifts in this wishlist:")
+                    
+                    # Fetch gifts for this wishlist
+                    gifts = make_api_call(f"/gifts/wishlist/{wishlist_data['id']}", "GET", None, require_auth=False)
+                    if gifts and isinstance(gifts, list):
+                        for gift in gifts:
+                            with st.container():
+                                st.write(f"**{gift['name']}**")
+                                if gift.get('image_url'):
+                                    st.image(gift['image_url'], width=100)
+                                if gift.get('price'):
+                                    st.write(f"Price: ${gift['price']}")
+                                if gift.get('purchase_link'):
+                                    st.markdown(f"[Purchase Link]({gift['purchase_link']})")
+                                st.write("---")
+                    else:
+                        st.info("No gifts in this wishlist.")
+                else:
+                    st.error("Invalid token or wishlist not found. Please check the token and try again.")
+            else:
+                st.warning("Please enter a wishlist token to search.")
+    
     # Initialize session state for showing create form
     if 'show_create_form' not in st.session_state:
         st.session_state.show_create_form = False
