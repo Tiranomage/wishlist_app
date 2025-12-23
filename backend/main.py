@@ -50,6 +50,12 @@ def on_startup():
             try:
                 conn.execute(text("ALTER TABLE wishlists ADD COLUMN IF NOT EXISTS share_token VARCHAR(5)"))
                 conn.execute(text("CREATE UNIQUE INDEX IF NOT EXISTS uq_wishlists_share_token ON wishlists(share_token)"))
+                # Добавляем новое поле selected к таблице gifts (без IF NOT EXISTS для SQLite)
+                try:
+                    conn.execute(text("ALTER TABLE gifts ADD COLUMN selected BOOLEAN DEFAULT FALSE"))
+                except:
+                    # Column might already exist, ignore error
+                    pass
                 trans.commit()
             except Exception:
                 trans.rollback()
