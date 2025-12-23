@@ -112,7 +112,11 @@ def dashboard():
     if st.sidebar.button("Logout"):
         logout()
     
-    st.title("Your Wishlists")
+    # Tabs for different views
+    tab1, tab2 = st.tabs(["My Wishlists", "Search Public Wishlists"])
+    
+    with tab1:
+        st.header("Your Wishlists")
     
     # Initialize session state for showing create form
     if 'show_create_form' not in st.session_state:
